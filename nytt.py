@@ -1,7 +1,9 @@
 import requests 
 import FreeSimpleGUI as sg
 
-tab_layout1 = [[sg.Button('Exit'), sg.Checkbox('My first Checkbox!')],
+add_title = False
+
+tab_layout1 = [[sg.Button('evil'), sg.Checkbox('My first Checkbox!')],
                [sg.Button('Another Button.')]]
 tab_layout2 = [
     [sg.Button('My third Button!'), sg.Checkbox('My second Checkbox!')],
@@ -12,8 +14,8 @@ tab_layout2 = [
 tab_layout3 = [[sg.Button('Exit')]]
 
 layout = [
-    [sg.TabGroup([[sg.Tab("Tab 1", tab_layout1), sg.Tab("Tab 2", tab_layout2), sg.Tab("Exit", tab_layout3)]])],
-    [sg.Button('Exit')]]
+    [sg.TabGroup([[sg.Tab("Tab 1", tab_layout1), sg.Tab("Tab 2", tab_layout2), sg.Tab("Exit", tab_layout3)]])]
+]
 
 
 layout1 = [
@@ -27,5 +29,9 @@ while True:
     event, values = window.read()
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
+    if add_title == True:
+        print("add_title")
+    else:
+        print("no title")
 
 window.close()
