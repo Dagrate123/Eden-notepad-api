@@ -1,37 +1,39 @@
 import requests 
 import FreeSimpleGUI as sg
 
-add_title = False
-
-tab_layout1 = [[sg.Button('evil'), sg.Checkbox('My first Checkbox!')],
-               [sg.Button('Another Button.')]]
-tab_layout2 = [
-    [sg.Button('My third Button!'), sg.Checkbox('My second Checkbox!')],
-        [sg.Text("Enter your message:")],
-        [sg.Multiline(size=(150, 150), key='-MESSAGE-')],
+sidebar = [
+    [sg.Text("Notes", font=("Any", 12, "bold"))],
+    [sg.Listbox(
+        values=[],
+        size=(20, 50),
+        key="-NAV-",
+        enable_events=True
+    )],
+    [sg.Button('Exit')],
 ]
 
-tab_layout3 = [[sg.Button('Exit')]]
+content = [
+    [sg.Multiline(
+        size=(256, 65),
+        border_width=0,
+        background_color=sg.theme_background_color(),
+        key="-CONTENT-"
+    )]
+]
 
 layout = [
-    [sg.TabGroup([[sg.Tab("Tab 1", tab_layout1), sg.Tab("Tab 2", tab_layout2), sg.Tab("Exit", tab_layout3)]])]
+    [
+        sg.Column(sidebar, pad=(0, 0)), 
+        sg.VSeparator(), 
+        sg.Column(content, pad=(10, 0), expand_x=True, expand_y=True)
+    ]
 ]
 
-
-layout1 = [
-    [sg.Multiline(key='-ML-', write_only=True, size=(60,10))]
-]
-
-window = sg.Window('Fullscreen', layout, finalize=True, element_justification='center')
+window = sg.Window('Fullscreen', layout, finalize=True)
 window.maximize()
 
 while True:
     event, values = window.read()
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
-    if add_title == True:
-        print("add_title")
-    else:
-        print("no title")
-
 window.close()
