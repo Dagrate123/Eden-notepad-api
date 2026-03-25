@@ -2,8 +2,40 @@ import requests
 import FreeSimpleGUI as sg
 import sqlite3
 
-server = sqlite3.connect('server.db')
+server = sqlite3.connect("server.db")
 cursor = server.cursor()
+server.execute("PRAGMA foreign_keys = ON")
+
+server.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username VARCHAR(25) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+""")
+
+server.execute("""
+CREATE TABLE IF NOT EXISTS notes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    notename VARCHAR(25),
+    contents TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+""")
+
+cursor.execute("SELECT COUNT(*) FROM notes")
+if cursor.fetchone()[0] == 0:
+    cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", ("test", "pass"))
+
+    cursor.execute("INSERT INTO notes (user_id, notename, contents) VALUES (?, ?, ?)", (1, "note1", "hei, content"))
+    cursor.execute("INSERT INTO notes (user_id, notename, contents) VALUES (?, ?, ?)", (1, "note2", "hei2, content2"))
+    cursor.execute("INSERT INTO notes (user_id, notename, contents) VALUES (?, ?, ?)", (1, "note3", "hei3, content3"))
+
+    server.commit()
 
 sidebar = [
     [sg.Text("Notes", font=("Any", 12, "bold"))],
@@ -37,7 +69,7 @@ window = sg.Window('Fullscreen', layout, finalize=True)
 window.maximize()
 
 cursor = server.cursor()
-server.execute("SELECT id, notename FROM notes WHERE user_id = ?", (1, )),
+cursor.execute("SELECT id, notename FROM notes WHERE user_id = ?", (1, )),
 notater = cursor.fetchall()
 notat_dictionary = {name: note_id for note_id, name in notater}
 
@@ -53,22 +85,23 @@ while True:
             note_name = selected[0]
             note_id = notat_dictionary[note_name]
 
-            cursor.execute("SELECT contents FROM notater WHERE id = ?", (note_id, ))
+            cursor.execute("SELECT contents FROM notes WHERE id = ?", (note_id, ))
             content = cursor.fetchone()[0]
 
             window["-CONTENT-"].update(value=content)
 
-    if event == Save:
+    if event == "Save":
         selected = values["-NAV-"]
         if selected:
             note_name = selected[0]
             note_id = notat_dictionary[note_name]
             new_content = values["-CONTENT-"]
+            print("Saving:", note_name, new_content)
 
             cursor.execute(
                 """
-                UPDATE notater
-                SET contents = ?, updated_at = CURRENT_TIMESTAMP,
+                UPDATE notes
+                SET contents = ?, updated_at = CURRENT_TIMESTAMP
                 WHERE id = ? 
                 """, (new_content, note_id)
             )
