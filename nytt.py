@@ -37,15 +37,29 @@ if cursor.fetchone()[0] == 0:
 
     server.commit()
 
+def load_notes():
+    cursor.execute("SELECT id, notename FROM notes WHERE user_id = ?", (1,))
+    rows = cursor.fetchall()
+    return {name: note_id for note_id, name in rows}
+ 
+def refresh_listbox():
+    global notat_dictionary
+    notat_dictionary = load_notes()
+    window["-NAV-"].update(values=list(notat_dictionary.keys()))
+
 sidebar = [
     [sg.Text("Notes", font=("Any", 12, "bold"))],
     [sg.Listbox(
         values=[],
-        size=(20, 50),
+        size=(20, 40),
         key="-NAV-",
-        enable_events=True
+        enable_events=True,
+        expand_y=True,
+        right_click_menu=['', ['Rename', 'Delete', 'Add To-Do']]
     )],
-    [sg.Button('Save')], [sg.Button('Exit')],
+    [sg.Button('Save')],
+    [sg.Button('New Note')],
+    [sg.Button('Exit')]
 ]
 
 content = [
@@ -65,7 +79,7 @@ layout = [
     ]
 ]
 
-window = sg.Window('Fullscreen', layout, finalize=True)
+window = sg.Window('Notes App', layout, resizable=True, finalize=True)
 window.maximize()
 
 cursor = server.cursor()
@@ -107,5 +121,50 @@ while True:
             )
 
             server.commit()
+
+    if event == "New Note":
+        new_name = sg.popup_get_text("Enter note name:")
+        if new_name:
+            cursor.execute(
+                "INSERT INTO notes (user_id, notename, contents) VALUES (?, ?, ?)",
+                (1, new_name, "")
+            )
+            server.commit()
+            refresh_listbox()
+
+    if event == "Rename":
+        selected = values["-NAV-"]
+        if selected:
+            old_name = selected[0]
+            new_name = sg.popup_get_text("Rename note:", default_text=old_name)
+ 
+            if new_name:
+                note_id = notat_dictionary[old_name]
+                cursor.execute(
+                    "UPDATE notes SET notename = ? WHERE id = ?",
+                    (new_name, note_id)
+                )
+                server.commit()
+                refresh_listbox()
+ 
+    if event == "Delete":
+        selected = values["-NAV-"]
+        if selected:
+            note_name = selected[0]
+            note_id = notat_dictionary[note_name]
+ 
+            confirm = sg.popup_yes_no(f"Delete '{note_name}'?")
+            if confirm == "Yes":
+                cursor.execute("DELETE FROM notes WHERE id = ?", (note_id,))
+                server.commit()
+                window["-CONTENT-"].update("")
+                refresh_listbox()
+ 
+    if event == "Add To-Do":
+        selected = values["-NAV-"]
+        if selected:
+            current = values["-CONTENT-"]
+            todo_template = "\n- [ ] Task 1\n- [ ] Task 2\n"
+            window["-CONTENT-"].update(current + todo_template)
 
 window.close()

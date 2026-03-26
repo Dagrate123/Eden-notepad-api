@@ -52,8 +52,8 @@ while True:
         name = sg.popup_get_text("Note name:")
         if name:
             r = requests.post(f"{server}/notes",
-                              json={"notename": name, "contents": ""},
-                              verify=False)
+            json={"notename": name, "contents": ""},
+            verify=False)
             notes[name] = r.json()["id"]
             window["-NAV-"].update(values=list(notes.keys()))
 
