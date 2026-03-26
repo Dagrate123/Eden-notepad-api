@@ -1,23 +1,63 @@
-# Eden-notepad-api
+Klart! Her er alt samlet i én komplett `README.md`-fil som du kan legge rett i prosjektmappen:
 
-sett opp prosjektet:
+````markdown
+# Prosjekt README
 
-først må du clone prosjektet
+## Oppsett av prosjektet
 
-så må du sette opp at venv(virtual enviorment) ved å skrive python3 -m venv .venv
+Følg disse stegene for å sette opp prosjektet lokalt:
 
-deretter må du starte venv-en ved å skrive source .venv/bin/activate
+1. **Clone prosjektet**
+   ```bash
+   git clone <repo-url>
+   cd <prosjekt-mappe>
+````
 
-deretter laster du ned requests og freesimpleGui med pip install requests, freesimpleGui
+2. **Opprett et virtuelt miljø**
 
-bruker-tips:
+   ```bash
+   python3 -m venv .venv
+   ```
 
-høyreklikk for å legge til enten en to-do liste, gi nytt navn eller slette et notat
+3. **Aktiver det virtuelle miljøet**
 
-begrunnelse:
+   ```bash
+   source .venv/bin/activate
+   ```
 
-jeg har valgt å bruke freesimplegui fordi det er en lett, men kan fortsatt utvides en del. jeg valgte å ha en sidebar siden det ser mye bedrre ut en tabs. tabs blir veldig fort veldig rotete. til "2.utkast" skal jeg legge til at notat_navnet blir automatisk en tittel. da blir det mye finere. 
+4. **Installer nødvendige pakker**
 
-det er null api elementer. når jeg skulle hoste serveren så fikk jeg plutselig ikke lov til å ssh meg in(broken pipe). så det skal jeg også legge til neste gang.
+   ```bash
+   pip install requests freesimpleGui
+   ```
 
-notatene blir lagret i en databse, og egentlig ville jeg ha brukt mariaDB for scaleability, men sqlite er mye enklere og i denne problemstillingen, så funker den. 
+---
+
+## Bruker-tips
+
+* **Høyreklikk på et notat** for å:
+
+  * Legge til en to-do-liste
+  * Gi nytt navn til notatet
+  * Slette notatet
+
+* Notater lagres lokalt i en database. For enkelhet brukes SQLite, men for større skalerbarhet kunne MariaDB vært et alternativ.
+
+---
+
+## Begrunnelse for valg
+
+* **GUI-bibliotek:** Jeg har valgt å bruke **freesimpleGui** fordi det er lettvekt, men fortsatt fleksibelt og kan utvides ved behov.
+* **Sidebar vs. tabs:** En sidebar gir et ryddigere grensesnitt enn tabs, som fort blir rotete.
+* **Automatiske titler:** I neste versjon (2. utkast) vil notat-navnet automatisk brukes som tittel, noe som gjør notatene mer oversiktlige.
+* **Database:** Selv om MariaDB er mer skalerbart, er SQLite tilstrekkelig for denne problemstillingen og mye enklere å sette opp.
+* **API:** Prosjektet har ingen API-elementer. Under testing fikk jeg problemer med SSH (broken pipe), så det blir lagt til i neste versjon.
+
+```
+
+Denne filen er **klar til å brukes** som README i prosjektmappen.  
+
+Hvis du vil, kan jeg lage en **GitHub-optimalisert versjon med badges og kort intro** som ser mer profesjonell ut i repoet.  
+
+Vil du at jeg gjør det?
+```
