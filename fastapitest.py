@@ -38,14 +38,14 @@ CREATE TABLE IF NOT EXISTS notes (
 
 init_db()
 
-@app.get("/notes/{user_id}", response_model=List[Note])
+@app.get("/notes/{user_id}", response_model=list[Note])
 def get_notes(user_id: int):
     con = sqlite3.connect(DB)
     cursor = con.cursor()
     cursor.execute("SELECT id, notename FROM notes WHERE user_id = ?", (1, )),
     notater = cursor.fetchall()
     con.close()
-    return [Note(id=i[0]), user_id(id=i[1], notename=i[2], contents = i[3]) for i in notater]
+    return [Note(id=i[0], user_id=i[1], notename=i[2], contents = i[3]) for i in notater]
 
 @app.post("/notes")
 def create_note(note: Note):

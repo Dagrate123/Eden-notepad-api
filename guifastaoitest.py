@@ -18,7 +18,7 @@ content = [
 ]
 
 window = sg.Window("Simple Notepad", [sidebar + [sg.VSeparator(), sg.Column(content)]], finalize=True)
-notes = {}  # maps note name -> note ID
+notes = {}  
 
 def load_notes():
     global notes
