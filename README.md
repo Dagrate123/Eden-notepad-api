@@ -52,12 +52,3 @@ Følg disse stegene for å sette opp prosjektet lokalt:
 * **Automatiske titler:** I neste versjon (2. utkast) vil notat-navnet automatisk brukes som tittel, noe som gjør notatene mer oversiktlige.
 * **Database:** Selv om MariaDB er mer skalerbart, er SQLite tilstrekkelig for denne problemstillingen og mye enklere å sette opp.
 * **API:** Prosjektet har ingen API-elementer. Under testing fikk jeg problemer med SSH (broken pipe), så det blir lagt til i neste versjon.
-
-```
-
-Denne filen er **klar til å brukes** som README i prosjektmappen.  
-
-Hvis du vil, kan jeg lage en **GitHub-optimalisert versjon med badges og kort intro** som ser mer profesjonell ut i repoet.  
-
-Vil du at jeg gjør det?
-```
