@@ -163,8 +163,41 @@ while True:
     if event == "Add To-Do":
         selected = values["-NAV-"]
         if selected:
-            current = values["-CONTENT-"]
-            todo_template = "\n- [ ] Task 1\n- [ ] Task 2\n"
-            window["-CONTENT-"].update(current + todo_template)
+
+            layout = [
+                [sg.Text('Select your tasks:')],
+                [sg.Checkbox('Task 1', default=True, key='-OPT1-')],
+                [sg.Checkbox('Task 2', key='-OPT2-')],
+                [sg.Button('Submit'), sg.Button('Exit')]
+            ]
+
+            todo_window = sg.Window('Add To-Do', layout)
+
+            while True:
+                ev, vals = todo_window.read()
+
+                if ev == sg.WIN_CLOSED or ev == 'Exit':
+                    break
+
+                if ev == 'Submit':
+                    tasks = []
+
+                    if vals['-OPT1-']:
+                        tasks.append("- [x] Task 1")
+                    else:
+                        tasks.append("- [ ] Task 1")
+
+                    if vals['-OPT2-']:
+                        tasks.append("- [x] Task 2")
+                    else:
+                        tasks.append("- [ ] Task 2")
+
+                    current = values["-CONTENT-"]
+                    updated = current + "\n" + "\n".join(tasks)
+                    window["-CONTENT-"].update(updated)
+
+                    break
+
+            todo_window.close()
 
 window.close()
