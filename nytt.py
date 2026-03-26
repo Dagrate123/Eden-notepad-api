@@ -2,17 +2,17 @@ import requests
 import FreeSimpleGUI as sg
 import sqlite3
 
-server = sqlite3.connect("server.db")
-cursor = server.cursor()
-server.execute("PRAGMA foreign_keys = ON")
+server = sqlite3.connect("server.db") #connecter serveren til db-fil
+cursor = server.cursor() #pointer til serveren
+server.execute("PRAGMA foreign_keys = ON") #æøå allowed
 
-server.execute("""
+server.execute(""" 
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username VARCHAR(25) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL
 );
-""")
+""") #lager tabellen users - work in progress
 
 server.execute("""
 CREATE TABLE IF NOT EXISTS notes (
@@ -25,9 +25,9 @@ CREATE TABLE IF NOT EXISTS notes (
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-""")
+""") #lage trabellen dr notatene blir lagret 
 
-cursor.execute("SELECT COUNT(*) FROM notes")
+cursor.execute("SELECT COUNT(*) FROM notes") #skal inserte users safely, men det er null brukere
 if cursor.fetchone()[0] == 0:
     cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", ("test", "pass"))
 
@@ -37,17 +37,17 @@ if cursor.fetchone()[0] == 0:
 
     server.commit()
 
-def load_notes():
+def load_notes(): #loader riktig notat fra listen
     cursor.execute("SELECT id, notename FROM notes WHERE user_id = ?", (1,))
     rows = cursor.fetchall()
     return {name: note_id for note_id, name in rows}
  
-def refresh_listbox():
+def refresh_listbox(): #refresh sidebaren
     global notat_dictionary
     notat_dictionary = load_notes()
     window["-NAV-"].update(values=list(notat_dictionary.keys()))
 
-sidebar = [
+sidebar = [ #sidebar på siden av skjermen 
     [sg.Text("Notes", font=("Any", 12, "bold"))],
     [sg.Listbox(
         values=[],
@@ -55,7 +55,7 @@ sidebar = [
         key="-NAV-",
         enable_events=True,
         expand_y=True,
-        right_click_menu=['', ['Rename', 'Delete', 'Add To-Do']]
+        right_click_menu=['', ['Rename', 'Delete', 'Add To-Do']] #når du right clcker kommer denne menuen opp
     )],
     [sg.Button('Save')],
     [sg.Button('New Note')],
@@ -71,7 +71,7 @@ content = [
     )]
 ]
 
-layout = [
+layout = [ #layouten gjør den om til en sidebar med Litt padding
     [
         sg.Column(sidebar, pad=(0, 0)), 
         sg.VSeparator(), 
@@ -79,7 +79,7 @@ layout = [
     ]
 ]
 
-window = sg.Window('Notes App', layout, resizable=True, finalize=True)
+window = sg.Window('Notes App', layout, resizable=True, finalize=True) #storskjerm
 window.maximize()
 
 cursor = server.cursor()
@@ -89,7 +89,7 @@ notat_dictionary = {name: note_id for note_id, name in notater}
 
 window["-NAV-"].update(values=list(notat_dictionary.keys()))
 
-while True:
+while True: #notatene
     event, values = window.read()
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
@@ -104,7 +104,7 @@ while True:
 
             window["-CONTENT-"].update(value=content)
 
-    if event == "Save":
+    if event == "Save": #lagrer notatene i databasen
         selected = values["-NAV-"]
         if selected:
             note_name = selected[0]
@@ -122,7 +122,7 @@ while True:
 
             server.commit()
 
-    if event == "New Note":
+    if event == "New Note": #legger til ny notat i tabellen 
         new_name = sg.popup_get_text("Enter note name:")
         if new_name:
             cursor.execute(
@@ -132,7 +132,7 @@ while True:
             server.commit()
             refresh_listbox()
 
-    if event == "Rename":
+    if event == "Rename": #popup vindu som lar deg rename notatene
         selected = values["-NAV-"]
         if selected:
             old_name = selected[0]
@@ -147,7 +147,7 @@ while True:
                 server.commit()
                 refresh_listbox()
  
-    if event == "Delete":
+    if event == "Delete": #sletter notatene 
         selected = values["-NAV-"]
         if selected:
             note_name = selected[0]
