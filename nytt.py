@@ -1,6 +1,7 @@
 import requests 
 import FreeSimpleGUI as sg
 import sqlite3
+import hashlib 
 
 server = sqlite3.connect("server.db") #connecter serveren til db-fil
 cursor = server.cursor() #pointer til serveren
@@ -9,7 +10,7 @@ server.execute("PRAGMA foreign_keys = ON") #æøå allowed
 server.execute(""" 
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username VARCHAR(25) UNIQUE NOT NULL,
+    username VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL
 );
 """) #lager tabellen users - work in progress
@@ -160,7 +161,7 @@ while True: #notatene
                 window["-CONTENT-"].update("")
                 refresh_listbox()
  
-    if event == "Add To-Do":
+    if event == "Add To-Do": #lager en to do box. 
         selected = values["-NAV-"]
         if selected:
 
