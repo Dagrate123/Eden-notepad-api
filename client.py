@@ -1,7 +1,9 @@
-# stage1_local_notes.py
-
 import FreeSimpleGUI as sg
 import sqlite3
+import requests
+
+r = requests.get("http://192.168.20.74:8000/notes")
+print(r.json())
 
 conn = sqlite3.connect("server.db")
 cursor = conn.cursor()
