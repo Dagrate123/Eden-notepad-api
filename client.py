@@ -1,11 +1,11 @@
 import FreeSimpleGUI as sg
 import requests
 
-ip = "192.168.20.74"
+ip = "192.168.20.74" #ip-adressen
 port = 8000
 headers = {"X-API-Key": "mysecret123"}
 
-def load_notes():
+def load_notes(): #loader notatene fra serveren
     r = requests.get(f"http://{ip}:{port}/notes", headers=headers)
 
     if r.status_code != 200:
@@ -16,7 +16,7 @@ def load_notes():
     notes = {}
     contents = {}
 
-    for row in data:
+    for row in data: #loader hvert notat og content i notatene
         note_id = row[0]
         title = row[2] if len(row) > 2 else f"Note {note_id}"
         content = row[3] if len(row) > 3 else ""
@@ -33,7 +33,7 @@ def refresh():
 
     window["-NAV-"].update(values=list(notes_dict.keys()))
 
-sidebar = [
+sidebar = [ #sidebar på siden av skjermen 
     [sg.Text("Notes", font=("Any", 12, "bold"))],
     [sg.Listbox(
         values=[],
@@ -47,19 +47,20 @@ sidebar = [
     [sg.Button("Exit")]
 ]
 
-content = [
+content = [ #riktig content størrelse
     [sg.Multiline(
-        key="-CONTENT-",
-        size=(80, 35),
-        border_width=0
+        size=(256, 65),
+        border_width=0,
+        background_color=sg.theme_background_color(),
+        key="-CONTENT-"
     )]
 ]
 
-layout = [
+layout = [ #setter riktig layout
     [sg.Column(sidebar), sg.VSeparator(), sg.Column(content)]
 ]
 
-window = sg.Window("Notes App", layout, resizable=True, finalize=True)
+window = sg.Window("Notes App", layout, resizable=True, finalize=True) #window settings, fullskjerm og rezizable
 
 notes_dict, contents_dict = load_notes()
 window["-NAV-"].update(list(notes_dict.keys()))
@@ -79,20 +80,20 @@ while True:
             current_note_id = notes_dict[name]
             window["-CONTENT-"].update(contents_dict.get(current_note_id, ""))
 
-    if event == "Save" and current_note_id:
+    if event == "Save" and current_note_id: #lagrer 
         payload = [
             {
                 "id": current_note_id,
                 "content": values["-CONTENT-"]
             }
         ]
-        requests.post(
+        requests.post( #poster til serveren 
             f"http://{ip}:{port}/update",
             headers=headers,
             json=payload
         )
 
-    if event == "New Note":
+    if event == "New Note": #lager ny note
         name = sg.popup_get_text("Note name:")
 
         if name:
@@ -103,7 +104,7 @@ while True:
             )
             refresh()
 
-    if event == "Delete" and current_note_id:
+    if event == "Delete" and current_note_id: #sletter note
         requests.post(
             f"http://{ip}:{port}/delete",
             headers=headers,
