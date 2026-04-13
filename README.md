@@ -1,5 +1,3 @@
-Klart! Her er alt samlet i én komplett `README.md`-fil som du kan legge rett i prosjektmappen:
-
 ````markdown
 # Prosjekt README
 
