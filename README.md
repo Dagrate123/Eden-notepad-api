@@ -1,4 +1,3 @@
-````markdown
 # Prosjekt README
 
 ## Oppsett av prosjektet
@@ -9,44 +8,123 @@ Følg disse stegene for å sette opp prosjektet lokalt:
    ```bash
    git clone <repo-url>
    cd <prosjekt-mappe>
-````
+   ```
 
 2. **Opprett et virtuelt miljø**
-
    ```bash
    python3 -m venv .venv
    ```
 
 3. **Aktiver det virtuelle miljøet**
-
    ```bash
    source .venv/bin/activate
    ```
 
 4. **Installer nødvendige pakker**
-
    ```bash
-   pip install requests freesimpleGui
+   pip install requests FreeSimpleGUI
    ```
+
+---
+
+## Hvordan kjøre prosjektet
+
+Prosjektet består av to deler:
+
+### 1. Start serveren
+```bash
+python server.py
+```
+
+Du skal se:
+```
+Server running on http://localhost:8000
+```
+
+### 2. Start klienten (GUI)
+Åpne et nytt terminalvindu og kjør:
+```bash
+python client.py
+```
+
+---
+
+## Funksjonalitet
+
+- Opprette nye notater
+- Redigere og lagre notater
+- Slette notater
+- Navigere mellom notater via sidebar
+- Data lagres i database via API
+- oprette to-do lister
 
 ---
 
 ## Bruker-tips
 
-* **Høyreklikk på et notat** for å:
+* Velg et notat i sidebaren for å åpne det
+* Trykk **Save** for å lagre endringer
+* Trykk **New Note** for å lage et nytt notat
+* Trykk **Delete** for å slette valgt notat
 
-  * Legge til en to-do-liste
-  * Gi nytt navn til notatet
-  * Slette notatet
+---
 
-* Notater lagres lokalt i en database. For enkelhet brukes SQLite, men for større skalerbarhet kunne MariaDB vært et alternativ.
+## Teknologier brukt
+
+- **Python**
+- **FreeSimpleGUI** (GUI)
+- **SQLite** (database)
+- **HTTPServer** (backend API)
+- **Requests** (klient → server kommunikasjon)
+
+---
+
+## Arkitektur
+
+Prosjektet bruker en enkel klient–server-modell:
+
+```
+GUI (client) → HTTP API → SQLite database
+```
+
+- Klienten sender HTTP-requests til serveren
+- Serveren håndterer logikk og database
+- Databasen lagrer brukere og notater
+
+---
+
+## Sikkerhet
+
+- Passord lagres som hash (SHA-256)
+- API er beskyttet med en enkel API-nøkkel
 
 ---
 
 ## Begrunnelse for valg
 
-* **GUI-bibliotek:** Jeg har valgt å bruke **freesimpleGui** fordi det er lettvekt, men fortsatt fleksibelt og kan utvides ved behov.
-* **Sidebar vs. tabs:** En sidebar gir et ryddigere grensesnitt enn tabs, som fort blir rotete.
-* **Automatiske titler:** I neste versjon (2. utkast) vil notat-navnet automatisk brukes som tittel, noe som gjør notatene mer oversiktlige.
-* **Database:** Selv om MariaDB er mer skalerbart, er SQLite tilstrekkelig for denne problemstillingen og mye enklere å sette opp.
-* **API:** Prosjektet har ingen API-elementer. Under testing fikk jeg problemer med SSH (broken pipe), så det blir lagt til i neste versjon.
+* **GUI-bibliotek:** Jeg har valgt å bruke **FreeSimpleGUI** fordi det er lettvekt og enkelt å jobbe med.
+* **Sidebar vs. tabs:** En sidebar gir et mer oversiktlig og skalerbart grensesnitt.
+* **Database:** SQLite er enkelt å sette opp og tilstrekkelig for dette prosjektet.
+* **API:** Prosjektet bruker en egen HTTP-server for å skille frontend og backend, noe som gjør løsningen mer fleksibel og realistisk.
+
+---
+
+## Videre arbeid
+
+Mulige forbedringer:
+
+- Implementere innlogging i GUI
+- Bytte til sterkere hashing (bcrypt)
+- Legge til flere brukere (multi-user system)
+- Bedre feilhåndtering
+- Migrere til Flask/FastAPI
+- Deploye prosjektet
+
+---
+
+## Kjente problemer
+
+- Ingen ekte autentisering (kun API-key)
+- Ikke optimalisert for flere samtidige brukere
+- Enkel HTTP-server (ikke egnet for produksjon)
+
