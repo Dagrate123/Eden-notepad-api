@@ -114,12 +114,8 @@ GUI (client) → HTTP API → SQLite database
 Mulige forbedringer:
 
 - Implementere innlogging i GUI
-- Bytte til sterkere hashing (bcrypt)
 - Legge til flere brukere (multi-user system)
 - Bedre feilhåndtering
-- Migrere til Flask/FastAPI
-- Deploye prosjektet
-
 ---
 
 ## Kjente problemer
