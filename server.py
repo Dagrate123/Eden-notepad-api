@@ -128,4 +128,4 @@ class Handler(BaseHTTPRequestHandler):
             else:
                 self.wfile.write(json.dumps({"status": "error"}).encode())
 
-server = HTTPServer(("192.168.20.74", 8000), Handler)
+server = HTTPServer(("0.0.0.0", 8000), Handler)
