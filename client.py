@@ -6,7 +6,7 @@ port = 8000
 headers = {"X-API-Key": "mysecret123"}
 
 def load_notes(): #loader notatene fra serveren
-    r = requests.get(f"http://{ip}:{port}/notes", headers=headers)
+    r = requests.get(f"http://{ip}:{port}", headers=headers)
 
     if r.status_code != 200:
         return {}, {}
