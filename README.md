@@ -33,7 +33,7 @@ Prosjektet består av to deler:
 
 ### 1. Start serveren
 ```bash
-python server.py
+python3 server.py
 ```
 
 Du skal se:
@@ -44,7 +44,7 @@ Server running on http://192.168.20.74:8000/notes
 ### 2. Start klienten (GUI)
 Åpne et nytt terminalvindu og kjør:
 ```bash
-python client.py
+python3 client.py
 ```
 
 ---
