@@ -38,7 +38,7 @@ python server.py
 
 Du skal se:
 ```
-Server running on http://localhost:8000
+Server running on http://192.168.20.74:8000/notes
 ```
 
 ### 2. Start klienten (GUI)
