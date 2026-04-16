@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS users (
 );
 """) #lager tabellen users - work in progress
 
+
+
 server.execute("""
 CREATE TABLE IF NOT EXISTS notes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
