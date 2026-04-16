@@ -129,3 +129,5 @@ class Handler(BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps({"status": "error"}).encode())
 
 server = HTTPServer(("0.0.0.0", 8000), Handler)
+print("Server running on port 8000...")
+server.serve_forever()
